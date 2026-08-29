@@ -16,7 +16,7 @@ không phụ thuộc sample data, network hoặc wall clock.
 | Ca | Phạm vi | Điều kiện khó |
 |---:|---|---|
 | 1–5 | Contract | Healthy JSON shape, thiếu critical column, numeric-string drift, fixed-clock freshness, nhiều severity/action |
-| 6–8 | Metric anomaly | Weekend hợp lệ, zero-MAD, history outlier che anomaly |
+| 6–8 | Metric anomaly | Weekday/weekend, zero-MAD, outlier, giảm tương đối, `known_event`, drop-only |
 | 9–10 | Distribution | Cùng mean nhưng khác shape; cùng distribution khác thứ tự |
 | 11–14 | SLO | Đúng boundary budget, input sai, transient và sustained burn |
 | 15–17 | Lineage | BFS diamond, cycle và column lineage transitive |
@@ -31,6 +31,9 @@ document, empty RAG batch và JSON serialization với `allow_nan=False`.
 - Giá trị ép kiểu được vẫn có thể là schema drift.
 - Weekend khỏe sẽ trông bất thường nếu so với weekday history.
 - Một outlier lịch sử có thể che anomaly thật của mean/std.
+- Baseline phân tán rộng có thể che một cú giảm tương đối nghiêm trọng.
+- Metric sản lượng tăng khỏe không được báo như một cú giảm; sự kiện đã biết
+  cần được suppress nhưng vẫn để lại method có thể audit.
 - Cùng mean không đồng nghĩa cùng distribution.
 - Short-window spike không được page nếu long window không xác nhận.
 - Diamond/cycle graph làm hỏng traversal đệ quy ngây thơ.

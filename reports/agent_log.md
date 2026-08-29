@@ -22,11 +22,15 @@ không sao chép toàn bộ hội thoại.
 
 - **Giả thuyết:** Z-score trên toàn history gây false positive cuối tuần và một
   outlier lớn có thể che volume drop thật.
-- **Đề xuất của agent:** ưu tiên `same_segment_history`, dùng MAD khi đủ mẫu,
-  fallback Z-score và có noise floor khi MAD bằng 0.
-- **Kiểm thử/minh chứng:** weekend hợp lệ không bị báo; history có outlier vẫn
-  bắt current 180; constant history vẫn bắt current 40; NaN/Infinity không tạo
-  `score=NaN`.
+- **Đề xuất của agent:** ưu tiên `same_segment_history`; nếu thiếu thì tách cụm
+  weekday/weekend từ `day_of_week`. Auto kết hợp MAD, Z-score và mức giảm tương
+  đối từ 50%; metric sản lượng như `row_count` chỉ cảnh báo chiều giảm. Sự kiện
+  đã biết (`known_event`) được suppress rõ ràng. Baseline có độ phân tán bằng 0
+  chỉ coi giá trị đúng tâm là bình thường, mọi giá trị lệch tâm là anomaly.
+- **Kiểm thử/minh chứng:** weekend thấp hoặc cao hợp lệ không false positive;
+  outlier không che current 180; mức giảm tương đối vẫn bị bắt khi độ phân tán
+  rộng; sự kiện đã biết trả `auto:known_event`; history hằng 100 coi 100 bình
+  thường nhưng 101 và 40 là anomaly; NaN/Infinity không tạo `score=NaN`.
 - **Kết luận:** **Chấp nhận.**
 - **Lý do:** giảm false positive theo seasonality mà không cần mô hình ML phức
   tạp; incident drill 600→150 vẫn được phát hiện.

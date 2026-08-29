@@ -7,9 +7,9 @@
     "orders_rows": 600,
     "row_count_signal": {
       "is_anomaly": false,
-      "method": "auto:mad",
-      "reason": "median=600; mad=32.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; baseline_source=same_segment_history; metric_name=row_count; day_of_week=4",
-      "score": 0.0
+      "method": "auto:same_segment_history_mad",
+      "reason": "median=600; mad=32.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; zscore=0.0841039; baseline_source=same_segment_history; metric_name=row_count; day_of_week=4; relative_drop=0; dropped_nonfinite=0; directional=drop_only",
+      "score": 0.08410392245731371
     }
   },
   "incident": {
@@ -93,17 +93,17 @@
         "current_mean": 15.6,
         "document_count": 5,
         "is_anomaly": false,
-        "method": "auto:mad",
+        "method": "auto:history_mad",
         "metric": "mean_text_length",
-        "reason": "median=14.815; mad=0.59; threshold=3.5; finite_count=14; dropped_nonfinite=0; baseline_source=history; metric_name=mean_text_length",
+        "reason": "median=14.815; mad=0.59; threshold=3.5; finite_count=14; dropped_nonfinite=0; zscore=0.754794; baseline_source=history; metric_name=mean_text_length; relative_drop=-0.0529868; dropped_nonfinite=0",
         "score": 0.8974143283898309
       }
     },
     "row_count_signal": {
       "is_anomaly": true,
-      "method": "auto:mad",
-      "reason": "median=600; mad=32.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; baseline_source=same_segment_history; metric_name=row_count; day_of_week=4",
-      "score": 9.339088846153848
+      "method": "auto:same_segment_history_mad",
+      "reason": "median=600; mad=32.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; zscore=15.2228; baseline_source=same_segment_history; metric_name=row_count; day_of_week=4; relative_drop=0.75; dropped_nonfinite=0",
+      "score": 15.222809964773782
     },
     "slo": {
       "critical_contract_pass": {
@@ -168,9 +168,9 @@
     "orders_failed_contracts": [],
     "row_count_signal": {
       "is_anomaly": false,
-      "method": "auto:mad",
-      "reason": "median=600; mad=32.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; baseline_source=same_segment_history; metric_name=row_count; day_of_week=4",
-      "score": 0.0
+      "method": "auto:same_segment_history_mad",
+      "reason": "median=600; mad=32.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; zscore=0.0841039; baseline_source=same_segment_history; metric_name=row_count; day_of_week=4; relative_drop=0; dropped_nonfinite=0; directional=drop_only",
+      "score": 0.08410392245731371
     }
   },
   "reference_time_utc": "2026-08-28T12:26:30+00:00"

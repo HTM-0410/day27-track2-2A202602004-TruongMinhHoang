@@ -293,6 +293,30 @@ def test_anomaly_auto_uses_same_segment_history_to_avoid_seasonal_false_positive
     _assert_anomaly_shape(result)
     assert result["is_anomaly"] is False
 
+    # The generator emits a weekday-sized current batch even on Saturdays.
+    # Row volume is directional here: a healthy high batch must not page.
+    high_saturday = detect_metric(
+        600.0,
+        mixed_history,
+        method="auto",
+        context={
+            "metric_name": "row_count",
+            "day_of_week": 6,
+            "same_segment_history": weekend_history,
+        },
+    )
+    assert high_saturday["is_anomaly"] is False
+
+    # If the explicit segment is unavailable, day_of_week still selects the
+    # lower weekend cluster from a sufficiently large mixed baseline.
+    clustered_weekend = detect_metric(
+        100.0,
+        [980.0, 100.0, 1010.0, 95.0, 990.0, 105.0, 1020.0, 98.0],
+        method="auto",
+        context={"metric_name": "row_count", "day_of_week": 6},
+    )
+    assert clustered_weekend["is_anomaly"] is False
+
 
 # 7/20
 def test_anomaly_auto_detects_change_when_robust_scale_is_zero() -> None:
@@ -301,6 +325,18 @@ def test_anomaly_auto_detects_change_when_robust_scale_is_zero() -> None:
     _assert_anomaly_shape(result)
     assert result["is_anomaly"] is True
     assert result["score"] > 0
+
+    # A zero-variance baseline has no learned noise tolerance. Even a small
+    # deviation must not be hidden by an arbitrary percentage floor.
+    for method in ("zscore", "auto"):
+        shifted = detect_metric(101.0, [100.0] * 8, method=method)
+        stable = detect_metric(100.0, [100.0] * 8, method=method)
+        _assert_anomaly_shape(shifted)
+        _assert_anomaly_shape(stable)
+        assert shifted["is_anomaly"] is True
+        assert math.isfinite(shifted["score"])
+        assert stable["is_anomaly"] is False
+        assert stable["score"] == 0.0
 
     for invalid in [float("nan"), float("inf")]:
         result = detect_metric(invalid, [100.0] * 8, method="auto")
@@ -318,6 +354,25 @@ def test_anomaly_auto_is_not_masked_by_one_extreme_history_outlier() -> None:
     _assert_anomaly_shape(result)
     assert result["is_anomaly"] is True
     assert result["score"] > 0
+
+    # Relative volume loss is an independent guard when a naturally wide
+    # baseline keeps both standardized scores below their thresholds.
+    relative_drop = detect_metric(
+        100.0,
+        [50.0, 100.0, 150.0, 200.0, 250.0, 300.0, 350.0],
+        method="auto",
+        context={"metric_name": "row_count"},
+    )
+    assert relative_drop["is_anomaly"] is True
+
+    planned = detect_metric(
+        300.0,
+        [1000.0, 1010.0, 995.0, 1008.0, 1004.0, 1012.0, 998.0],
+        method="auto",
+        context={"known_event": "planned_maintenance"},
+    )
+    assert planned["is_anomaly"] is False
+    assert planned["method"] == "auto:known_event"
 
 
 # 9/20

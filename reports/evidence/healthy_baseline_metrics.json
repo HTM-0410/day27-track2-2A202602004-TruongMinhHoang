@@ -15,7 +15,7 @@
     "kb_documents": [],
     "orders": []
   },
-  "freshness_minutes": 5.0139916,
+  "freshness_minutes": 5.022007733333334,
   "input_hashes": {
     "customers": {
       "bytes": 4110,
@@ -30,7 +30,7 @@
     "kb_documents": {
       "bytes": 1521,
       "path": "data/incoming/kb_documents.jsonl",
-      "sha256": "6d7c19f06cb6d5858fe6090dd3a5126145641f4204727c7f328d1f657c685d4a"
+      "sha256": "db7072dfab4cf2119674c0783241286b44f361e77ba44b728a7090b396a63631"
     },
     "lab_config": {
       "bytes": 512,
@@ -50,7 +50,7 @@
     "orders": {
       "bytes": 21100,
       "path": "data/incoming/orders.csv",
-      "sha256": "e7c55e7d04b7930a9e0055ebdcd2ff13671a3c3d739631257587fd84633240f5"
+      "sha256": "45184df149bd83ddf705eef7886b95838af1592f0da52d099cc88f2714b6d12c"
     },
     "orders_contract": {
       "bytes": 925,
@@ -71,14 +71,14 @@
     "scale_ratio": 1.2916975537435154,
     "score": 0.8064830839810025
   },
-  "kb_freshness_minutes": 10.012682116666667,
+  "kb_freshness_minutes": 10.014216733333335,
   "kb_text_length_signal": {
     "current_mean": 15.6,
     "document_count": 5,
     "is_anomaly": false,
-    "method": "auto:mad",
+    "method": "auto:history_mad",
     "metric": "mean_text_length",
-    "reason": "median=14.815; mad=0.59; threshold=3.5; finite_count=14; dropped_nonfinite=0; baseline_source=history; metric_name=mean_text_length",
+    "reason": "median=14.815; mad=0.59; threshold=3.5; finite_count=14; dropped_nonfinite=0; zscore=0.754794; baseline_source=history; metric_name=mean_text_length; relative_drop=-0.0529868; dropped_nonfinite=0",
     "score": 0.8974143283898309
   },
   "multiwindow_burn_signal": {
@@ -104,20 +104,20 @@
       }
     }
   },
-  "orders_freshness_minutes": 5.0139916,
+  "orders_freshness_minutes": 5.022007733333334,
   "orders_rows": 252,
-  "reference_time_utc": "2026-08-29T04:46:44.839496+00:00",
+  "reference_time_utc": "2026-08-29T05:08:12.320464+00:00",
   "report_schema_version": 2,
   "row_count_anomaly": {
     "is_anomaly": false,
-    "method": "auto:mad",
-    "reason": "median=252.5; mad=12.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; baseline_source=same_segment_history; metric_name=row_count; day_of_week=5",
-    "score": 0.02697959
+    "method": "auto:same_segment_history_mad",
+    "reason": "median=252.5; mad=12.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; zscore=0.0909705; baseline_source=same_segment_history; metric_name=row_count; day_of_week=5; relative_drop=0.0019802; dropped_nonfinite=0; directional=drop_only",
+    "score": 0.09097048486571414
   },
   "row_count_same_segment_points": 6,
   "sample_blast_radius_from_stg_orders": [
     "fct_daily_revenue",
     "ceo_revenue_dashboard"
   ],
-  "timestamp": "2026-08-29T04:46:44.839496+00:00"
+  "timestamp": "2026-08-29T05:08:12.320464+00:00"
 }
