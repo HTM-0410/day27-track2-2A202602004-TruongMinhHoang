@@ -257,7 +257,7 @@
       "effective_severity": "warning",
       "exception_raised": false,
       "expectation_type": "expect_column_max_to_be_between",
-      "observed_value": 1787979791.0,
+      "observed_value": 1788019979.0,
       "pipeline_effect": "continue",
       "rule_id": "orders.updated_at.freshness_30m",
       "success": true,
@@ -299,7 +299,7 @@
   "source": {
     "path": "data/incoming/orders.csv",
     "row_count": 252,
-    "sha256": "45184df149bd83ddf705eef7886b95838af1592f0da52d099cc88f2714b6d12c"
+    "sha256": "5ce7dee24d2162ee2601208b22c5642b1b5d2d8ebf75574a020ff074b9afa944"
   },
   "validation_definition": "orders_validation_definition"
 }

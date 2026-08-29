@@ -121,6 +121,7 @@ def _write_verification_summary(junit_path: Path) -> None:
     gx_action_path = EVIDENCE_DIR / "gx_action_drill.json"
     dbt_path = EVIDENCE_DIR / "dbt_run_results.json"
     incident_path = EVIDENCE_DIR / "incident_drill.json"
+    bonus_path = EVIDENCE_DIR / "bonus_evidence.json"
     required = (
         junit_path,
         baseline_path,
@@ -128,6 +129,7 @@ def _write_verification_summary(junit_path: Path) -> None:
         gx_action_path,
         dbt_path,
         incident_path,
+        bonus_path,
     )
     missing = [str(path) for path in required if not path.exists()]
     if missing:
@@ -155,6 +157,7 @@ def _write_verification_summary(junit_path: Path) -> None:
     gx_action = json.loads(gx_action_path.read_text(encoding="utf-8"))
     dbt = json.loads(dbt_path.read_text(encoding="utf-8"))
     incident = json.loads(incident_path.read_text(encoding="utf-8"))
+    bonus = json.loads(bonus_path.read_text(encoding="utf-8"))
     dbt_statuses = Counter(
         str(result.get("status", "unknown")).lower()
         for result in dbt.get("results", [])
@@ -205,6 +208,14 @@ def _write_verification_summary(junit_path: Path) -> None:
                 "is_anomaly"
             ],
             "recovery_page": incident["recovery"]["multiwindow"]["page"],
+        },
+        "bonus": {
+            "all_checks_passed": bonus["all_checks_passed"],
+            "implemented_check_count": len(bonus["checks"]),
+            "candidate_points_before_cap": bonus["candidate_points_before_cap"],
+            "rubric_bonus_cap": bonus["rubric_bonus_cap"],
+            "max_countable_points": bonus["max_countable_points"],
+            "grader_decides": True,
         },
         "evidence_files": {
             path.relative_to(ROOT).as_posix(): {
@@ -363,6 +374,10 @@ def main() -> None:
     _run(
         "Deterministic incident drill",
         [python, "-X", "utf8", "scripts/run_incident_drill.py"],
+    )
+    _run(
+        "Bonus differential evidence",
+        [python, "-X", "utf8", "scripts/run_bonus_evidence.py"],
     )
     _write_verification_summary(junit_path)
     print("\nLAB 27 VERIFICATION: PASS", flush=True)

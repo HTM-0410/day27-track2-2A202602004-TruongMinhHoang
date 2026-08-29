@@ -10,6 +10,7 @@ Các tệp trong thư mục này được sinh bằng code thật, không ghi ta
 | `gx_action_drill.json` | `scripts/run_gx_action_drill.py` | Warning/critical decision và quarantine |
 | `dbt_run_results.json` | clean-room `dbt build` | Raw status models, seeds, data tests và unit test |
 | `incident_drill.json` | `scripts/run_incident_drill.py` | Before/incident/recovery, blast radius và SLO |
+| `bonus_evidence.json` | `scripts/run_bonus_evidence.py` | So sánh baseline failure với advanced behavior cho 7 bonus đã triển khai |
 | `verification_summary.json` | `scripts/verify_lab.py` | Tổng hợp PASS và hash toàn bộ raw evidence |
 | `test_strategy.md` | Thiết kế acceptance | Giải thích đúng 20 hidden-proxy cases |
 

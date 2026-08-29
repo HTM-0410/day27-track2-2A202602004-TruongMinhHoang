@@ -1,5 +1,13 @@
 {
   "artifact_schema_version": 1,
+  "bonus": {
+    "all_checks_passed": true,
+    "candidate_points_before_cap": 33,
+    "grader_decides": true,
+    "implemented_check_count": 7,
+    "max_countable_points": 15,
+    "rubric_bonus_cap": 15
+  },
   "dbt": {
     "result_count": 23,
     "status_counts": {
@@ -8,9 +16,13 @@
     }
   },
   "evidence_files": {
+    "reports/evidence/bonus_evidence.json": {
+      "bytes": 4349,
+      "sha256": "5cef1e8ab6ca958eab627bbdaecdacdfc63c1b220719237568713eb326b27842"
+    },
     "reports/evidence/dbt_run_results.json": {
-      "bytes": 25480,
-      "sha256": "3c2b9c1655a547b85b84c3ebe78c320127ba543d318537d4a2e4b491c8d805a2"
+      "bytes": 25489,
+      "sha256": "9a3ace1e0d87168aa195f72cf04e9695f2ba71e43aa3d75198d9f11f689ac8f0"
     },
     "reports/evidence/gx_action_drill.json": {
       "bytes": 23220,
@@ -18,11 +30,11 @@
     },
     "reports/evidence/gx_healthy_validation.json": {
       "bytes": 9685,
-      "sha256": "72b2a0ce3df57180b02d7e51f0fbe3c4ce8389bb6800e1076fe07bda2fd3aa8d"
+      "sha256": "e94bad7bf40f4e4b375396af8293926353c7296d8575189ede274a337de21cca"
     },
     "reports/evidence/healthy_baseline_metrics.json": {
       "bytes": 4448,
-      "sha256": "3ca3eb0a60a2a3717f332de3b65aabb48833d13b0e73dc445ba368a1b544fb79"
+      "sha256": "0343104c96a056b755a63d9d6bab9c1802043b4cb33fca08ffec0eb373b101e0"
     },
     "reports/evidence/incident_drill.json": {
       "bytes": 6517,
@@ -30,7 +42,7 @@
     },
     "reports/evidence/pytest_results.xml": {
       "bytes": 4398,
-      "sha256": "63d332a46595828adb4c90e0b24b6ddac12814e34b81648c910c285b3c485da7"
+      "sha256": "90c6e09d933ab010fd363ca921a9e08960335cd61c659c2b1d4242d33142b9d5"
     }
   },
   "gx": {
@@ -51,7 +63,7 @@
       "target": 0.999
     },
     "failed_contract_issue_count": 0,
-    "kb_freshness_minutes": 10.014216733333335,
+    "kb_freshness_minutes": 10.013332266666668,
     "multiwindow_burn_signal": {
       "current_contract_burn": 0.0,
       "historical_short_burn": 3.7299999999999964,
@@ -75,7 +87,7 @@
         }
       }
     },
-    "orders_freshness_minutes": 5.022007733333334,
+    "orders_freshness_minutes": 5.019951116666666,
     "orders_rows": 252,
     "row_count_anomaly": {
       "is_anomaly": false,
@@ -99,6 +111,6 @@
     "failures": 0,
     "skipped": 0,
     "tests": 32,
-    "time_seconds": 4.658
+    "time_seconds": 4.266
   }
 }

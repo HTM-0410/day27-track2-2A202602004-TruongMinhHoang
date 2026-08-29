@@ -15,7 +15,7 @@
     "kb_documents": [],
     "orders": []
   },
-  "freshness_minutes": 5.022007733333334,
+  "freshness_minutes": 5.019951116666666,
   "input_hashes": {
     "customers": {
       "bytes": 4110,
@@ -30,7 +30,7 @@
     "kb_documents": {
       "bytes": 1521,
       "path": "data/incoming/kb_documents.jsonl",
-      "sha256": "db7072dfab4cf2119674c0783241286b44f361e77ba44b728a7090b396a63631"
+      "sha256": "3e6d171fd2fbbd38033c3cb1dbb3378aae51de2d718b5960502397bcd8fc196e"
     },
     "lab_config": {
       "bytes": 512,
@@ -50,7 +50,7 @@
     "orders": {
       "bytes": 21100,
       "path": "data/incoming/orders.csv",
-      "sha256": "45184df149bd83ddf705eef7886b95838af1592f0da52d099cc88f2714b6d12c"
+      "sha256": "5ce7dee24d2162ee2601208b22c5642b1b5d2d8ebf75574a020ff074b9afa944"
     },
     "orders_contract": {
       "bytes": 925,
@@ -71,7 +71,7 @@
     "scale_ratio": 1.2916975537435154,
     "score": 0.8064830839810025
   },
-  "kb_freshness_minutes": 10.014216733333335,
+  "kb_freshness_minutes": 10.013332266666668,
   "kb_text_length_signal": {
     "current_mean": 15.6,
     "document_count": 5,
@@ -104,9 +104,9 @@
       }
     }
   },
-  "orders_freshness_minutes": 5.022007733333334,
+  "orders_freshness_minutes": 5.019951116666666,
   "orders_rows": 252,
-  "reference_time_utc": "2026-08-29T05:08:12.320464+00:00",
+  "reference_time_utc": "2026-08-29T16:18:00.197067+00:00",
   "report_schema_version": 2,
   "row_count_anomaly": {
     "is_anomaly": false,
@@ -119,5 +119,5 @@
     "fct_daily_revenue",
     "ceo_revenue_dashboard"
   ],
-  "timestamp": "2026-08-29T05:08:12.320464+00:00"
+  "timestamp": "2026-08-29T16:18:00.197067+00:00"
 }

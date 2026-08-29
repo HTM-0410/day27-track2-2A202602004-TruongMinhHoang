@@ -1,100 +1,95 @@
-# Nhật ký quyết định khi sử dụng AI Agent
+# Agent log
 
-Nhật ký chỉ lưu các quyết định kỹ thuật quan trọng theo đúng chuỗi
-**giả thuyết → đề xuất → kiểm thử/minh chứng → chấp nhận/từ chối/chỉnh sửa**,
-không sao chép toàn bộ hội thoại.
+- Sinh viên: Trương Minh Hoàng
+- MSSV: 2A202602004
+- Kết quả trên lớp do sinh viên cung cấp: hệ thống vượt qua 20/20 test ẩn của
+  thầy Tín và được cộng 10 điểm.
+- Lưu ý: 20 test ẩn của thầy không nằm trong repo. Bộ 20 hidden-proxy trong repo
+  là bộ mô phỏng riêng và cũng đạt 20/20.
 
-## Quyết định 1 — Contract phải bắt được type drift và freshness
+Em hỏi agent theo từng phần, tự chọn phương án rồi chạy test để kiểm tra. Em
+không giao cho agent làm cả bài trong một prompt.
 
-- **Giả thuyết:** numeric string, giá trị không hữu hạn và timestamp cũ có thể
-  qua starter validator dù schema nguồn đã drift.
-- **Đề xuất của agent:** dùng strict type mask, parse datetime nhiều timezone về
-  UTC, thêm freshness clock và ánh xạ severity → action.
-- **Kiểm thử/minh chứng:** các ca contract trong
-  `tests_acceptance/test_hidden_proxy.py`; kết quả raw trong
-  `reports/evidence/pytest_results.xml`.
-- **Kết luận:** **Chấp nhận sau khi chỉnh sửa.**
-- **Lý do:** fixture public ban đầu hard-code ngày 28/08 nên tự stale theo thời
-  gian. Fixture được chuyển sang thời gian tương đối; production validator
-  không có nhánh nhận diện hoặc bỏ qua test.
+## 1. Contract
 
-## Quyết định 2 — Auto anomaly phải xử lý seasonality và outlier
+- Em hỏi: Contract có bắt được numeric string và timestamp cũ không?
+- Agent trả lời: Nên kiểm tra type chặt, đổi thời gian về UTC và thêm freshness.
+- Em chọn: Không tự cast dữ liệu sai type vì sẽ che schema drift.
+- Test: Type drift, missing column, freshness và severity/action đều pass trong
+  tests_acceptance/test_hidden_proxy.py.
+- Có sửa lại fixture test dùng ngày cố định vì để lâu nó tự thành stale.
 
-- **Giả thuyết:** Z-score trên toàn history gây false positive cuối tuần và một
-  outlier lớn có thể che volume drop thật.
-- **Đề xuất của agent:** ưu tiên `same_segment_history`; nếu thiếu thì tách cụm
-  weekday/weekend từ `day_of_week`. Auto kết hợp MAD, Z-score và mức giảm tương
-  đối từ 50%; metric sản lượng như `row_count` chỉ cảnh báo chiều giảm. Sự kiện
-  đã biết (`known_event`) được suppress rõ ràng. Baseline có độ phân tán bằng 0
-  chỉ coi giá trị đúng tâm là bình thường, mọi giá trị lệch tâm là anomaly.
-- **Kiểm thử/minh chứng:** weekend thấp hoặc cao hợp lệ không false positive;
-  outlier không che current 180; mức giảm tương đối vẫn bị bắt khi độ phân tán
-  rộng; sự kiện đã biết trả `auto:known_event`; history hằng 100 coi 100 bình
-  thường nhưng 101 và 40 là anomaly; NaN/Infinity không tạo `score=NaN`.
-- **Kết luận:** **Chấp nhận.**
-- **Lý do:** giảm false positive theo seasonality mà không cần mô hình ML phức
-  tạp; incident drill 600→150 vẫn được phát hiện.
+## 2. Anomaly
 
-## Quyết định 3 — Distribution drift không thể chỉ so mean
+- Em hỏi: Z-score báo sai ở weekend và history có variance bằng 0 thì sửa thế
+  nào?
+- Agent trả lời: Dùng history cùng segment, MAD, relative drop và giữ Z-score
+  cho API cũ.
+- Em chọn: Auto dùng weekday/weekend, MAD + Z-score + relative drop 50%.
+  row_count chỉ cảnh báo chiều giảm; known_event thì suppress.
+- Test: Saturday khỏe không bị báo, 600 xuống 150 bị bắt, history toàn 100 mà
+  current 101 vẫn bị bắt, planned maintenance không page.
+- Evidence: reports/evidence/bonus_evidence.json và incident_drill.json.
 
-- **Giả thuyết:** hai batch cùng mean nhưng khác variance/tail sẽ lọt qua
-  mean-ratio detector.
-- **Đề xuất của agent:** kết hợp two-sample KS tự cài đặt với robust
-  location/scale effect.
-- **Kiểm thử/minh chứng:** baseline quanh 10 và current gồm 0/20 có cùng mean
-  nhưng bị phát hiện; permutation của cùng distribution không bị báo.
-- **Kết luận:** **Chấp nhận.**
-- **Lý do:** bắt đúng failure starter bỏ sót và không thêm dependency vào core
-  stable API.
+## 3. Distribution drift
 
-## Quyết định 4 — Chốt bộ hidden-proxy trước khi sửa implementation
+- Em hỏi: Hai batch cùng mean nhưng khác shape thì detector mean-ratio có bỏ
+  sót không?
+- Agent trả lời: Có. Nên thêm two-sample KS và so location/scale.
+- Em chọn: Dùng KS + robust effect, không thêm thư viện ML.
+- Test: Batch 0/20 có cùng mean với baseline vẫn bị bắt; chỉ đảo thứ tự thì
+  không bị báo.
+- Kết quả nằm ở hidden-proxy 9–10.
 
-- **Giả thuyết:** 10 public tests không đủ chứng minh robustness của chín stable
-  APIs.
-- **Đề xuất của agent:** tạo đúng 20 test functions độc lập, xa các threshold
-  mơ hồ, phủ contract, anomaly, distribution, SLO, lineage và RAG.
-- **Kiểm thử/minh chứng:** implementation cuối đạt 20/20 hidden-proxy cases.
-  Hai GX integration tests được tách riêng; tổng suite là 32 tests.
-- **Kết luận:** **Chấp nhận.**
-- **Lý do:** test dựa trên invariant của đề, không dựa trên output của code đã
-  viết; stable interface trong `student_api.py` được giữ nguyên.
+## 4. Bộ test khó
 
-## Quyết định 5 — Severity phải điều khiển hành động pipeline
+- Em hỏi: Public test chỉ có 10 ca thì kiểm tra hidden test bằng cách nào?
+- Agent trả lời: Tạo 20 test theo behavior của stable API.
+- Em chọn: Contract 5, anomaly 3, distribution 2, SLO 4, lineage 3 và RAG 3.
+  GX để thành test riêng.
+- Test: Tổng suite 32/32 pass, riêng hidden-proxy là 20/20.
+- Evidence: reports/evidence/pytest_results.xml.
 
-- **Giả thuyết:** chỉ gắn nhãn `severity` nhưng luôn exit 0 và không
-  quarantine thì chưa phải reliability control.
-- **Đề xuất của agent:** GX 1.21 Suite → ValidationDefinition → Checkpoint →
-  custom Action; warning tiếp tục, critical block và materialize dòng lỗi.
-- **Kiểm thử/minh chứng:** `reports/evidence/gx_action_drill.json` ghi nhận
-  warning case = `warn`, exit 0, quarantine 0; duplicate case = `block`,
-  exit 1, quarantine đúng 2 rows.
-- **Kết luận:** **Chấp nhận.**
-- **Lý do:** Action chạy thật và tạo JSON/CSV, không phải log tự mô tả.
+## 5. GX action
 
-## Quyết định 6 — SCD join phải có native dbt unit test
+- Em hỏi: Chỉ ghi severity trong kết quả đã đủ chưa?
+- Agent trả lời: Chưa. Warning phải được đi tiếp, critical phải block và
+  quarantine dòng lỗi.
+- Em chọn: Dùng GX Checkpoint và custom Action, không chỉ in log.
+- Test: Warning trả warn, exit 0, quarantine 0 dòng. Duplicate critical trả
+  block, exit khác 0 và quarantine đúng 2 dòng.
+- Evidence: reports/evidence/gx_action_drill.json.
 
-- **Giả thuyết:** hai active customer versions có thể nhân đôi order facts dù
-  generic not-null/unique và aggregate nonnegative đều xanh.
-- **Đề xuất của agent:** fixture gồm hai active + một inactive version, hai
-  completed + một pending order; model chọn deterministic latest active row.
-- **Kiểm thử/minh chứng:** expected 2 rows/170 revenue; completed non-USD bị
-  fail closed; raw dbt result nằm ở
-  `reports/evidence/dbt_run_results.json`.
-- **Kết luận:** **Chấp nhận sau hai lần chỉnh sửa.**
-- **Lý do:** lần chạy đầu làm lộ `valid_to=''` cast lỗi và cú pháp deprecation;
-  sửa bằng `trim/nullif/try_cast` và `arguments.values`, sau đó đạt 23/23.
+## 6. dbt unit test
 
-## Quyết định 7 — Baseline và RCA phải có nguồn gốc tái lập
+- Em hỏi: Hai active customer versions có thể nhân doanh thu nhưng generic
+  test vẫn xanh. Nên test thế nào?
+- Agent trả lời: Tạo fixture có hai active versions, hai completed orders và
+  expected revenue 170 thay vì 340.
+- Em chọn: Viết native dbt unit test và chọn active version mới nhất trước khi
+  join.
+- Lần chạy đầu lỗi valid_to rỗng và cú pháp cũ. Em sửa rồi chạy lại.
+- Kết quả: dbt 23/23 pass. Evidence ở
+  reports/evidence/dbt_run_results.json.
 
-- **Giả thuyết:** reset cố định 600 rows vào cuối tuần làm baseline khỏe bị báo
-  anomaly; report không có hash input thì khó audit.
-- **Đề xuất của agent:** reset theo median của UTC weekday, dùng một reference
-  clock/run, lưu SHA-256 input, chạy clean-room, incident drill và recovery
-  assertions.
-- **Kiểm thử/minh chứng:** `reports/evidence/healthy_baseline_metrics.json`,
-  `reports/evidence/incident_drill.json` và
-  `reports/evidence/verification_summary.json`; clean-room có
-  contract 0 lỗi, anomaly false, freshness khỏe, GX PASS và dbt PASS.
-- **Kết luận:** **Chấp nhận sau khi chỉnh sửa.**
-- **Lý do:** clean-room đầu tiên phát hiện DuckDB không tự tạo parent directory;
-  `sync_dbt_seeds.py` được sửa để provision `warehouse/` trước build.
+## 7. Cách tạo evidence
+
+- Em hỏi: Chạy reset sẽ sửa source data, có cách nào tạo evidence mà không
+  đụng dữ liệu gốc không?
+- Agent trả lời: Chạy trong clean-room tạm, dùng chung UTC clock và lưu SHA-256.
+- Em chọn: Dùng scripts/verify_lab.py làm lệnh kiểm tra chính trên Windows.
+- Test: Verifier chạy pytest, baseline, GX, dbt, incident và bonus.
+- Kết quả: PASS; hash nằm trong reports/evidence/verification_summary.json.
+
+## 8. Bonus
+
+- Em hỏi: Chỉ liệt kê bonus đã làm thì có đủ không?
+- Agent trả lời: Không. Phải chỉ ra baseline bỏ sót gì và phần nâng cấp xử lý
+  được gì.
+- Em chọn: Chứng minh 7 mục đã có code thật: MAD/same-weekday, dbt unit, GX
+  action, quarantine, column lineage, multi-window và RAG drift.
+- Em không chọn thêm Soda, Elementary hoặc OpenLineage vì chưa có execution
+  evidence và rubric chỉ tính tối đa 15 điểm.
+- Test: scripts/run_bonus_evidence.py trả 7/7 pass. Candidate trước cap là 33,
+  cap là 15; giảng viên quyết định điểm.
+- Evidence: reports/evidence/bonus_evidence.json.

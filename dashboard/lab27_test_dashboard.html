@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09131f">
+  <title>Lab 27 · Testboard & Presentation Flow</title>
+  <style>
+    :root {
+      --bg: #07101b; --bg-soft: #0b1725; --surface: rgba(16,31,47,.88);
+      --surface-strong: #102337; --line: rgba(160,205,232,.15);
+      --line-bright: rgba(160,205,232,.28); --text: #eef7fb; --muted: #9cb2c3;
+      --faint: #6f899b; --mint: #77efc0; --mint-strong: #24c98a;
+      --amber: #ffcf79; --coral: #ff8f7a; --violet: #b7a8ff; --cyan: #6edcf2;
+      --shadow: 0 22px 60px rgba(0,0,0,.24); --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-width: 320px; color: var(--text);
+      background: radial-gradient(circle at 15% -10%,rgba(90,181,229,.18),transparent 32rem),
+        radial-gradient(circle at 90% 12%,rgba(119,239,192,.11),transparent 30rem), var(--bg);
+      font-family: Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height: 1.5;
+    }
+    button { font: inherit; } a { color: inherit; }
+    .shell { width: min(1480px,calc(100% - 40px)); margin: 0 auto; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:22px; padding:26px 0 22px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand-mark { width:42px; height:42px; display:grid; place-items:center; border:1px solid rgba(119,239,192,.42); border-radius:13px; background:linear-gradient(145deg,rgba(119,239,192,.23),rgba(110,220,242,.08)); color:var(--mint); font-weight:800; letter-spacing:-.05em; box-shadow:0 0 0 5px rgba(119,239,192,.04); }
+    .brand small,.eyebrow { display:block; color:var(--mint); font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:800; }
+    .brand strong { display:block; margin-top:2px; font-size:15px; }
+    .toolbar { display:flex; align-items:center; gap:10px; }
+    .pill,.ghost-button { border:1px solid var(--line); background:rgba(16,35,55,.64); color:var(--muted); border-radius:999px; padding:9px 13px; font-size:12px; cursor:pointer; transition:border-color .2s ease,color .2s ease,background .2s ease,transform .2s ease; }
+    .ghost-button:hover,.pill:hover { color:var(--text); border-color:var(--line-bright); transform:translateY(-1px); }
+    .status-dot { display:inline-block; width:7px; height:7px; margin-right:7px; border-radius:50%; background:var(--mint); box-shadow:0 0 0 4px rgba(119,239,192,.12); }
+    .hero { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(340px,.9fr); gap:18px; padding:28px; border:1px solid var(--line); border-radius:26px; background:linear-gradient(135deg,rgba(20,47,68,.95),rgba(12,27,43,.9)); box-shadow:var(--shadow); overflow:hidden; position:relative; }
+    .hero::after { content:""; position:absolute; width:360px; height:360px; right:-130px; top:-160px; border:1px solid rgba(119,239,192,.15); border-radius:50%; box-shadow:0 0 0 35px rgba(119,239,192,.03),0 0 0 70px rgba(119,239,192,.025); pointer-events:none; }
+    h1,h2,h3,p { margin:0; }
+    h1 { max-width:770px; margin-top:10px; font-size:clamp(30px,4.2vw,62px); letter-spacing:-.055em; line-height:1.02; }
+    .hero-copy { max-width:720px; margin-top:15px; color:#c0d1dc; font-size:15px; }
+    .hero-note { display:flex; flex-wrap:wrap; gap:9px; margin-top:24px; }
+    .hero-note span { padding:8px 11px; border:1px solid rgba(160,205,232,.16); border-radius:10px; color:#c7dbe5; background:rgba(5,16,28,.28); font-size:12px; }
+    .hero-score { align-self:center; padding:20px; border:1px solid rgba(119,239,192,.25); border-radius:19px; background:rgba(5,18,30,.38); position:relative; z-index:1; }
+    .score-head { display:flex; align-items:flex-start; justify-content:space-between; gap:15px; }
+    .score-head h2 { font-size:16px; letter-spacing:-.02em; }
+    .score-badge { padding:6px 9px; border-radius:8px; color:var(--mint); background:rgba(119,239,192,.1); font-size:11px; font-weight:800; }
+    .score-number { display:flex; align-items:baseline; gap:8px; margin:15px 0 11px; }
+    .score-number strong { font-size:52px; letter-spacing:-.07em; line-height:1; }
+    .score-number span { color:var(--muted); font-size:13px; }
+    .progress { height:9px; overflow:hidden; border-radius:99px; background:rgba(160,205,232,.12); }
+    .progress>i { display:block; width:100%; height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--mint-strong),var(--mint)); box-shadow:0 0 18px rgba(119,239,192,.4); }
+    .score-foot { display:flex; justify-content:space-between; gap:14px; margin-top:9px; color:var(--muted); font-size:12px; }
+    .stats { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin:16px 0 26px; }
+    .stat { min-height:114px; padding:17px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); box-shadow:0 12px 30px rgba(0,0,0,.12); }
+    .stat-label { color:var(--muted); font-size:12px; }
+    .stat-value { margin:12px 0 4px; font-size:29px; font-weight:800; letter-spacing:-.055em; }
+    .stat-meta { display:flex; align-items:center; gap:6px; color:var(--faint); font-size:11px; }
+    .check { color:var(--mint); font-weight:900; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:16px; margin:32px 0 14px; }
+    .section-head h2 { font-size:23px; letter-spacing:-.04em; }
+    .section-head p { max-width:580px; color:var(--muted); font-size:13px; text-align:right; }
+    .tabs { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:13px; }
+    .tab { border:1px solid var(--line); border-radius:10px; background:transparent; color:var(--muted); padding:9px 13px; cursor:pointer; font-size:12px; transition:.2s ease; }
+    .tab.active,.tab:hover { border-color:rgba(119,239,192,.45); color:var(--mint); background:rgba(119,239,192,.08); }
+    .test-layout { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr); gap:16px; align-items:start; }
+    .test-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .test-card { min-height:178px; padding:17px; border:1px solid var(--line); border-radius:16px; background:var(--surface); cursor:pointer; transition:transform .2s ease,border-color .2s ease,background .2s ease; }
+    .test-card:hover,.test-card.open { transform:translateY(-2px); border-color:rgba(119,239,192,.4); background:var(--surface-strong); }
+    .test-top { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+    .test-id { color:var(--faint); font-size:11px; letter-spacing:.1em; font-weight:800; }
+    .status { padding:5px 8px; border-radius:7px; color:var(--mint); background:rgba(119,239,192,.1); font-size:10px; text-transform:uppercase; letter-spacing:.08em; font-weight:800; }
+    .status.amber { color:var(--amber); background:rgba(255,207,121,.1); }
+    .status.violet { color:var(--violet); background:rgba(183,168,255,.1); }
+    .test-card h3 { margin:15px 0 7px; font-size:15px; letter-spacing:-.025em; }
+    .test-card>p { color:var(--muted); font-size:12px; }
+    .test-detail { display:none; margin-top:13px; padding-top:12px; border-top:1px solid var(--line); color:#c8d8e1; font-size:12px; }
+    .test-card.open .test-detail { display:block; animation:reveal .25s ease; }
+    .test-detail b { color:var(--mint); font-weight:700; }
+    @keyframes reveal { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+    .evidence-panel { padding:18px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg,rgba(22,45,67,.9),rgba(13,28,44,.9)); position:sticky; top:14px; }
+    .panel-kicker { color:var(--cyan); font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:800; }
+    .evidence-panel h3 { margin:9px 0 8px; font-size:18px; letter-spacing:-.03em; }
+    .evidence-panel>p { color:var(--muted); font-size:12px; }
+    .evidence-list { display:grid; gap:8px; margin:17px 0; }
+    .evidence-row { display:grid; grid-template-columns:29px 1fr auto; align-items:center; gap:9px; padding:10px; border:1px solid var(--line); border-radius:11px; background:rgba(4,14,25,.24); }
+    .evidence-icon { width:25px; height:25px; display:grid; place-items:center; border-radius:8px; color:var(--mint); background:rgba(119,239,192,.1); font-size:12px; font-weight:900; }
+    .evidence-row strong { display:block; font-size:12px; }
+    .evidence-row small { display:block; color:var(--muted); font-size:10px; }
+    .evidence-row em { color:var(--mint); font-size:11px; font-style:normal; font-weight:800; }
+    .artifact { margin-top:15px; padding:11px; border-radius:10px; color:var(--muted); background:rgba(4,14,25,.35); font-size:11px; overflow-wrap:anywhere; }
+    .artifact code { color:var(--cyan); font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .artifact a { color:inherit; text-decoration:none; }
+    .artifact a:hover code { text-decoration:underline; }
+    .flow-wrap { padding:22px; border:1px solid var(--line); border-radius:var(--radius); background:rgba(12,28,44,.75); overflow-x:auto; }
+    .flow { display:grid; grid-template-columns:repeat(6,minmax(145px,1fr)); min-width:900px; align-items:center; }
+    .flow-node { position:relative; padding:15px 13px; min-height:126px; border:1px solid var(--line-bright); border-radius:14px; background:linear-gradient(145deg,rgba(22,52,75,.95),rgba(12,28,44,.95)); }
+    .flow-node:not(:last-child)::after { content:"→"; position:absolute; right:-25px; top:45px; z-index:2; color:var(--mint); font-size:23px; font-weight:300; }
+    .flow-index { display:inline-grid; place-items:center; width:24px; height:24px; border-radius:7px; color:#09131f; background:var(--mint); font-size:11px; font-weight:900; }
+    .flow-node h3 { margin:12px 0 5px; font-size:13px; }
+    .flow-node p { color:var(--muted); font-size:11px; }
+    .flow-node .tag { display:inline-block; margin-top:9px; color:var(--cyan); font-size:10px; }
+    .logic-grid { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr); gap:16px; margin-top:16px; }
+    .logic-card,.scenario-card { padding:21px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); }
+    .logic-card h3,.scenario-card h3 { font-size:18px; letter-spacing:-.03em; }
+    .logic-card>p,.scenario-card>p { margin-top:7px; color:var(--muted); font-size:12px; }
+    .algorithm { display:grid; grid-template-columns:repeat(5,minmax(90px,1fr)); gap:8px; align-items:center; margin:24px 0 19px; }
+    .algo-step { position:relative; min-height:87px; padding:12px 10px; border:1px solid rgba(110,220,242,.24); border-radius:12px; background:rgba(110,220,242,.06); }
+    .algo-step:not(:last-child)::after { content:"+"; position:absolute; right:-14px; top:29px; z-index:2; width:18px; height:26px; color:var(--amber); background:var(--surface); text-align:center; font-weight:800; }
+    .algo-step .num { color:var(--cyan); font-size:10px; font-weight:800; }
+    .algo-step strong { display:block; margin-top:8px; font-size:12px; line-height:1.2; }
+    .algo-step small { display:block; margin-top:4px; color:var(--muted); font-size:10px; }
+    .formula { padding:13px 15px; border-left:3px solid var(--mint); border-radius:0 10px 10px 0; color:#d6e7ee; background:rgba(119,239,192,.06); font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:12px; }
+    .formula b { color:var(--mint); }
+    .scenario-buttons { display:flex; gap:7px; flex-wrap:wrap; margin:17px 0 13px; }
+    .scenario-button { border:1px solid var(--line); border-radius:9px; padding:8px 10px; color:var(--muted); background:rgba(5,16,28,.35); cursor:pointer; font-size:11px; }
+    .scenario-button.active,.scenario-button:hover { border-color:rgba(255,207,121,.45); color:var(--amber); background:rgba(255,207,121,.08); }
+    .scenario-output { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .scenario-output>div { padding:11px; border:1px solid var(--line); border-radius:10px; background:rgba(5,16,28,.3); }
+    .scenario-output small { display:block; color:var(--muted); font-size:10px; }
+    .scenario-output strong { display:block; margin-top:4px; font-size:17px; letter-spacing:-.03em; }
+    .scenario-output .decision strong { color:var(--mint); }
+    .scenario-output .decision.alert strong { color:var(--coral); }
+    .reason { margin-top:12px; color:var(--muted); font-size:11px; }
+    .reason b { color:var(--text); }
+    .presenter { display:grid; grid-template-columns:250px minmax(0,1fr); gap:16px; padding:21px; border:1px solid rgba(183,168,255,.22); border-radius:var(--radius); background:linear-gradient(135deg,rgba(49,42,91,.45),rgba(14,29,47,.8)); }
+    .presenter-nav { display:grid; gap:7px; align-content:start; }
+    .presenter-step { display:grid; grid-template-columns:32px 1fr; gap:9px; align-items:center; padding:10px; border:1px solid transparent; border-radius:11px; color:var(--muted); background:transparent; text-align:left; cursor:pointer; }
+    .presenter-step:hover,.presenter-step.active { border-color:rgba(183,168,255,.32); color:var(--text); background:rgba(183,168,255,.1); }
+    .presenter-step .step-no { display:grid; place-items:center; width:27px; height:27px; border-radius:8px; color:var(--violet); background:rgba(183,168,255,.12); font-size:11px; font-weight:800; }
+    .presenter-step strong { display:block; font-size:12px; }
+    .presenter-step small { display:block; margin-top:2px; color:var(--faint); font-size:10px; }
+    .speaker-note { display:flex; flex-direction:column; justify-content:center; min-height:245px; padding:23px; border:1px solid rgba(183,168,255,.2); border-radius:14px; background:rgba(5,16,28,.34); }
+    .speaker-note .note-label { color:var(--violet); font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:800; }
+    .speaker-note h3 { margin-top:10px; font-size:25px; letter-spacing:-.045em; }
+    .speaker-note p { max-width:700px; margin-top:11px; color:#cbd6e8; font-size:14px; }
+    .speaker-note .say { margin-top:19px; padding:13px 15px; border-left:3px solid var(--violet); border-radius:0 10px 10px 0; color:#dcd8ff; background:rgba(183,168,255,.08); font-size:12px; }
+    .speaker-note .say::before { content:"Nói: "; color:var(--violet); font-weight:800; }
+    .speaker-meta { display:flex; gap:9px; flex-wrap:wrap; margin-top:17px; }
+    .speaker-meta span { padding:6px 9px; border:1px solid var(--line); border-radius:8px; color:var(--muted); font-size:10px; }
+    footer { display:flex; justify-content:space-between; gap:15px; margin:34px 0 24px; padding-top:17px; border-top:1px solid var(--line); color:var(--faint); font-size:11px; }
+    footer code { color:var(--cyan); font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .hidden { display:none !important; }
+    @media (max-width:1080px) { .stats { grid-template-columns:repeat(3,minmax(0,1fr)); } .test-layout,.logic-grid { grid-template-columns:1fr; } .evidence-panel { position:static; } }
+    @media (max-width:760px) {
+      .shell { width:min(100% - 24px,620px); } .topbar { align-items:flex-start; } .toolbar .pill { display:none; }
+      .hero { grid-template-columns:1fr; padding:21px; } h1 { font-size:39px; } .stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .test-grid { grid-template-columns:1fr; } .section-head { display:block; } .section-head p { margin-top:6px; text-align:left; }
+      .algorithm { grid-template-columns:1fr; } .algo-step:not(:last-child)::after { content:"↓"; right:48%; top:auto; bottom:-22px; width:18px; height:24px; }
+      .presenter { grid-template-columns:1fr; } .presenter-nav { grid-template-columns:repeat(3,1fr); } .presenter-step { grid-template-columns:1fr; gap:5px; } .presenter-step small { display:none; }
+      footer { display:block; } footer span { display:block; margin-top:5px; }
+    }
+    @media print {
+      :root { --bg:#fff; --surface:#f7fafc; --surface-strong:#eef5f8; --text:#102337; --muted:#526979; --faint:#617987; --line:#d8e3e9; --line-bright:#b8ccd5; }
+      body { background:#fff; } .toolbar,.tabs,.scenario-buttons { display:none; }
+      .hero,.stat,.test-card,.evidence-panel,.flow-wrap,.logic-card,.scenario-card,.presenter { box-shadow:none; break-inside:avoid; } .test-detail { display:block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">27</div><div><small>Data reliability</small><strong>Testboard · Lab 27</strong></div></div>
+      <div class="toolbar"><span class="pill"><i class="status-dot"></i>Verifier snapshot · PASS</span><button class="ghost-button" id="printButton" type="button">In / xuất briefing</button></div>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <span class="eyebrow">Acceptance benchmark · hidden-proxy ready</span>
+          <h1 id="page-title">Từ một dòng dữ liệu đến quyết định tin cậy.</h1>
+          <p class="hero-copy">Bảng trình bày biến 20 ca test khó thành một câu chuyện có thể kiểm chứng: dữ liệu vào → lớp bảo vệ → tín hiệu anomaly → hành động → bằng chứng raw.</p>
+          <div class="hero-note"><span>32 test functions đã pass</span><span>23 dbt results đã pass/success</span><span>Không phụ thuộc network</span></div>
+        </div>
+        <div class="hero-score">
+          <div class="score-head"><h2>Reliability score</h2><span class="score-badge">CLEAN ROOM</span></div>
+          <div class="score-number"><strong>100%</strong><span>evidence-backed</span></div>
+          <div class="progress" aria-label="100 percent tests passed"><i></i></div>
+          <div class="score-foot"><span>32 / 32 pytest</span><span>0 failure · 0 skip</span></div>
+        </div>
+      </section>
+      <section class="stats" aria-label="Tổng quan kết quả">
+        <article class="stat"><span class="stat-label">Pytest public + acceptance</span><div class="stat-value">32 / 32</div><div class="stat-meta"><span class="check">✓</span> 4.66s · JUnit raw</div></article>
+        <article class="stat"><span class="stat-label">Acceptance hidden-proxy</span><div class="stat-value">20 / 20</div><div class="stat-meta"><span class="check">✓</span> invariant behavior</div></article>
+        <article class="stat"><span class="stat-label">dbt build</span><div class="stat-value">23 / 23</div><div class="stat-meta"><span class="check">✓</span> WARN 0 · ERROR 0</div></article>
+        <article class="stat"><span class="stat-label">GX expectations</span><div class="stat-value">21</div><div class="stat-meta"><span class="check">✓</span> healthy failures 0</div></article>
+        <article class="stat"><span class="stat-label">Incident drill</span><div class="stat-value">PASS</div><div class="stat-meta"><span class="check">✓</span> detect → recover</div></article>
+      </section>
+      <section id="testboard" aria-labelledby="testboard-title">
+        <div class="section-head"><div><span class="eyebrow">01 · Testboard</span><h2 id="testboard-title">Test như nào, logic ra sao?</h2></div><p>Chạm vào từng thẻ để mở điều kiện khó, invariant và cách nó chứng minh implementation không chỉ “xanh” tình cờ.</p></div>
+        <nav class="tabs" aria-label="Lọc nhóm test">
+          <button class="tab active" data-filter="all" type="button">Tất cả · 20</button><button class="tab" data-filter="contract" type="button">Contract · 5</button><button class="tab" data-filter="anomaly" type="button">Anomaly · 3</button><button class="tab" data-filter="platform" type="button">Platform · 2</button><button class="tab" data-filter="slo" type="button">SLO / lineage / RAG · 10</button>
+        </nav>
+        <div class="test-layout">
+          <div class="test-grid" id="testGrid">
+            <article class="test-card" data-group="contract"><div class="test-top"><span class="test-id">01—05</span><span class="status">PASS</span></div><h3>Contract & freshness</h3><p>Schema khỏe không đủ: phải bắt type drift, non-finite, freshness và map severity → action.</p><div class="test-detail"><b>Logic:</b> strict type mask + UTC fixed clock. Numeric string không được “ép cho qua”; critical fail phải quarantine, warning chỉ warn.</div></article>
+            <article class="test-card" data-group="anomaly"><div class="test-top"><span class="test-id">06</span><span class="status amber">HARD</span></div><h3>Seasonality không tạo false positive</h3><p>Saturday 250 so với Saturday history phải khỏe, dù pooled weekday baseline cao hơn.</p><div class="test-detail"><b>Logic:</b> ưu tiên <code>same_segment_history</code>; thiếu segment thì cluster weekend/weekday từ median pooled history.</div></article>
+            <article class="test-card" data-group="anomaly"><div class="test-top"><span class="test-id">07</span><span class="status amber">HARD</span></div><h3>Zero-MAD vẫn bắt được shift</h3><p>History hằng 100: current 100 bình thường, current 101 phải anomaly.</p><div class="test-detail"><b>Logic:</b> scale bằng 0 không thể dùng noise floor tùy ý. Chỉ đúng center nhận score 0; lệch center nhận sentinel hữu hạn và bị bắt.</div></article>
+            <article class="test-card" data-group="anomaly"><div class="test-top"><span class="test-id">08</span><span class="status amber">HARD</span></div><h3>Outlier, relative drop & event</h3><p>Outlier không che cú giảm; maintenance đã biết thì suppress nhưng method vẫn audit được.</p><div class="test-detail"><b>Logic:</b> MAD ∨ Z-score ∨ relative drop ≥ 50%; metric row_count chỉ page chiều giảm; <code>known_event</code> trả <code>auto:known_event</code>.</div></article>
+            <article class="test-card" data-group="platform"><div class="test-top"><span class="test-id">09—10</span><span class="status violet">PASS</span></div><h3>Distribution drift</h3><p>Cùng mean nhưng khác shape/tail phải khác; cùng distribution đổi thứ tự thì không.</p><div class="test-detail"><b>Logic:</b> two-sample KS + robust location/scale effect, không phụ thuộc thứ tự phần tử.</div></article>
+            <article class="test-card" data-group="slo"><div class="test-top"><span class="test-id">11—14</span><span class="status violet">PASS</span></div><h3>SLO & multi-window burn</h3><p>Boundary budget, input sai, short spike và sustained burn có quyết định khác nhau.</p><div class="test-detail"><b>Logic:</b> chuẩn hóa error budget; chỉ page khi fast và slow window cùng vượt policy.</div></article>
+            <article class="test-card" data-group="slo"><div class="test-top"><span class="test-id">15—17</span><span class="status violet">PASS</span></div><h3>Lineage & blast radius</h3><p>Diamond/cycle graph không được lặp vô hạn, column lineage phải transitive.</p><div class="test-detail"><b>Logic:</b> BFS với visited set; trả dataset/column downstream và owner chịu ảnh hưởng.</div></article>
+            <article class="test-card" data-group="slo"><div class="test-top"><span class="test-id">18—20</span><span class="status violet">PASS</span></div><h3>RAG telemetry</h3><p>Stable/collapsed length và stable/shifted embedding norm đều có signal đúng.</p><div class="test-detail"><b>Logic:</b> metric rỗng/non-finite trả shape ổn định, không âm thầm sinh <code>score=NaN</code>.</div></article>
+          </div>
+          <aside class="evidence-panel">
+            <span class="panel-kicker">Evidence chain</span><h3>Không chỉ “pass” — có dấu vết để audit.</h3><p>Mỗi nhóm logic đi cùng một raw artifact có timestamp, kết quả và hash trong verification summary.</p>
+            <div class="evidence-list">
+              <div class="evidence-row"><span class="evidence-icon">⌁</span><div><strong>Pytest JUnit</strong><small>public + 20 proxy cases</small></div><em>32 PASS</em></div>
+              <div class="evidence-row"><span class="evidence-icon">G</span><div><strong>GX checkpoint</strong><small>healthy + action drill</small></div><em>PASS</em></div>
+              <div class="evidence-row"><span class="evidence-icon">db</span><div><strong>dbt run results</strong><small>seeds, models, tests, unit</small></div><em>23 PASS</em></div>
+              <div class="evidence-row"><span class="evidence-icon">↗</span><div><strong>Incident drill</strong><small>fault → page → recovery</small></div><em>PASS</em></div>
+            </div>
+            <div class="artifact">Raw root: <a href="../reports/evidence/verification_summary.json"><code>reports/evidence/verification_summary.json ↗</code></a></div>
+          </aside>
+        </div>
+      </section>
+      <section aria-labelledby="flow-title">
+        <div class="section-head"><div><span class="eyebrow">02 · Processing flow</span><h2 id="flow-title">Một tín hiệu đi qua hệ thống như thế nào?</h2></div><p>Luồng này dùng để nói trong 60 giây: mỗi lớp có một nhiệm vụ, một điểm chặn và một đầu ra cho lớp kế tiếp.</p></div>
+        <div class="flow-wrap"><div class="flow">
+          <div class="flow-node"><span class="flow-index">01</span><h3>Input snapshot</h3><p>Orders, KB, history và fixed UTC clock.</p><span class="tag">source + hash</span></div>
+          <div class="flow-node"><span class="flow-index">02</span><h3>Contract</h3><p>Type, null, unique, accepted, freshness.</p><span class="tag">pass / warn / block</span></div>
+          <div class="flow-node"><span class="flow-index">03</span><h3>Anomaly</h3><p>Segmented MAD + z-score + drop guard.</p><span class="tag">healthy / page</span></div>
+          <div class="flow-node"><span class="flow-index">04</span><h3>Lineage</h3><p>BFS tìm downstream và blast radius.</p><span class="tag">owner + impact</span></div>
+          <div class="flow-node"><span class="flow-index">05</span><h3>SLO</h3><p>Error budget và multi-window policy.</p><span class="tag">info / page</span></div>
+          <div class="flow-node"><span class="flow-index">06</span><h3>Action</h3><p>Allow, warn, quarantine hoặc incident.</p><span class="tag">evidence trail</span></div>
+        </div></div>
+      </section>
+      <section aria-labelledby="logic-title">
+        <div class="section-head"><div><span class="eyebrow">03 · Algorithm lab</span><h2 id="logic-title">Xử lý bài toán anomaly bằng statistical guardrails.</h2></div><p>Chọn một scenario để thấy cùng một detector phân biệt “tăng hợp lệ”, “giảm thật” và “đã biết trước”.</p></div>
+        <div class="logic-grid">
+          <article class="logic-card"><h3>Auto anomaly decision path</h3><p>Không hard-code <code>row_count == N</code>; baseline được lấy theo ngữ cảnh rồi mới tổng hợp các tín hiệu.</p>
+            <div class="algorithm" aria-label="Các bước tính anomaly">
+              <div class="algo-step"><span class="num">01 · INPUT</span><strong>Current + history</strong><small>lọc NaN / Infinity</small></div>
+              <div class="algo-step"><span class="num">02 · BASELINE</span><strong>Same segment</strong><small>weekday / weekend fallback</small></div>
+              <div class="algo-step"><span class="num">03 · ROBUST</span><strong>Median + MAD</strong><small>threshold 3.5</small></div>
+              <div class="algo-step"><span class="num">04 · SIGNALS</span><strong>Z ∨ MAD ∨ drop</strong><small>drop ≥ 50%</small></div>
+              <div class="algo-step"><span class="num">05 · POLICY</span><strong>Direction + event</strong><small>row_count drop-only</small></div>
+            </div>
+            <div class="formula"><b>is_anomaly</b> = (MAD &gt; 3.5) ∨ (Z-score &gt; threshold) ∨ (relative_drop ≥ 0.50), sau đó áp policy <b>drop_only</b> và <b>known_event</b>.</div>
+          </article>
+          <article class="scenario-card"><h3>Scenario simulator</h3><p>Minh họa đúng các ca từng làm detector dễ sai.</p>
+            <div class="scenario-buttons" role="group" aria-label="Chọn anomaly scenario"><button class="scenario-button active" data-scenario="healthy" type="button">Saturday khỏe</button><button class="scenario-button" data-scenario="incident" type="button">Volume drop</button><button class="scenario-button" data-scenario="event" type="button">Known event</button></div>
+            <div class="scenario-output"><div><small>Current rows</small><strong id="scenarioCurrent">600</strong></div><div><small>Segment median</small><strong id="scenarioMedian">250</strong></div><div class="decision" id="scenarioDecision"><small>Decision</small><strong id="scenarioResult">HEALTHY</strong></div></div>
+            <p class="reason" id="scenarioReason"><b>Vì sao:</b> current tăng so với weekend baseline; với metric row_count, tăng không phải bằng chứng partial ingestion nên giữ healthy.</p>
+          </article>
+        </div>
+      </section>
+      <section aria-labelledby="present-title">
+        <div class="section-head"><div><span class="eyebrow">04 · Speaker flow</span><h2 id="present-title">Flow thuyết trình trên dashboard</h2></div><p>Bấm từng bước để hiện nội dung nói. Có thể dùng trực tiếp khi trình bày bài lab trong 5–7 phút.</p></div>
+        <div class="presenter">
+          <nav class="presenter-nav" aria-label="Các bước thuyết trình">
+            <button class="presenter-step active" data-step="0" type="button"><span class="step-no">01</span><span><strong>Đặt bài toán</strong><small>30 giây</small></span></button>
+            <button class="presenter-step" data-step="1" type="button"><span class="step-no">02</span><span><strong>Đọc testboard</strong><small>60 giây</small></span></button>
+            <button class="presenter-step" data-step="2" type="button"><span class="step-no">03</span><span><strong>Giải thích anomaly</strong><small>90 giây</small></span></button>
+            <button class="presenter-step" data-step="3" type="button"><span class="step-no">04</span><span><strong>Đi qua pipeline</strong><small>60 giây</small></span></button>
+            <button class="presenter-step" data-step="4" type="button"><span class="step-no">05</span><span><strong>Chứng minh incident</strong><small>90 giây</small></span></button>
+            <button class="presenter-step" data-step="5" type="button"><span class="step-no">06</span><span><strong>Chốt & defend</strong><small>45 giây</small></span></button>
+          </nav>
+          <article class="speaker-note" aria-live="polite"><span class="note-label" id="speakerLabel">Bước 01 · Context</span><h3 id="speakerTitle">Đặt bài toán reliability</h3><p id="speakerBody">Mục tiêu của lab không phải chỉ làm pipeline chạy xanh. Mục tiêu là biết một batch dữ liệu có đáng tin để publish hay cần dừng, cảnh báo và truy ngược hay không.</p><div class="say" id="speakerSay">Hãy nhìn dashboard như một chuỗi quyết định: dữ liệu đi vào, được kiểm tra, được so với baseline, rồi mới quyết định tác động và hành động.</div><div class="speaker-meta"><span id="speakerEvidence">Evidence: healthy_baseline_metrics.json</span><span id="speakerTime">30 giây</span></div></article>
+        </div>
+      </section>
+    </main>
+    <footer><span>Lab 27 · Data Observability / Data Reliability</span><span>Source: <code>reports/evidence/verification_summary.json</code> · Open locally, no build step</span></footer>
+  </div>
+  <script>
+    const scenarioData = {
+      healthy: { current:"600", median:"250", result:"HEALTHY", alert:false, reason:"current tăng so với weekend baseline; với metric row_count, tăng không phải bằng chứng partial ingestion nên giữ healthy." },
+      incident: { current:"150", median:"600", result:"ANOMALY", alert:true, reason:"relative_drop = 75%; MAD, z-score và drop guard cùng chỉ về một hướng nên page analytics on-call." },
+      event: { current:"300", median:"1,004", result:"SUPPRESSED", alert:false, reason:"planned_maintenance là known_event: không page, nhưng method auto:known_event vẫn lưu lý do để audit." }
+    };
+    const speakerData = [
+      { label:"Bước 01 · Context", title:"Đặt bài toán reliability", body:"Mục tiêu của lab không phải chỉ làm pipeline chạy xanh. Mục tiêu là biết một batch dữ liệu có đáng tin để publish hay cần dừng, cảnh báo và truy ngược hay không.", say:"Hãy nhìn dashboard như một chuỗi quyết định: dữ liệu đi vào, được kiểm tra, được so với baseline, rồi mới quyết định tác động và hành động.", evidence:"Evidence: healthy_baseline_metrics.json", time:"30 giây" },
+      { label:"Bước 02 · Testboard", title:"Đọc test theo invariant", body:"20 hidden-proxy cases được gom thành contract, anomaly, distribution, SLO, lineage và RAG. Mỗi nhóm kiểm tra một failure mode mà test đơn giản dễ bỏ sót.", say:"Điểm quan trọng là test không khóa tên thư viện; nó khóa behavior: input xấu phải bị bắt, graph phải dừng ở cycle, và score không được là NaN.", evidence:"Evidence: pytest_results.xml · 32 PASS", time:"60 giây" },
+      { label:"Bước 03 · Anomaly", title:"Giải thích detector không false positive", body:"Auto detector lấy baseline theo segment, dùng median/MAD để bền với outlier, bổ sung z-score và relative drop, rồi áp policy drop-only cho row_count.", say:"Saturday 600 không phải incident chỉ vì Saturday history khoảng 250; ngược lại 150 trên baseline 600 là cú giảm 75% và phải page.", evidence:"Evidence: healthy_baseline_metrics.json · incident_drill.json", time:"90 giây" },
+      { label:"Bước 04 · Pipeline", title:"Từ signal đến blast radius", body:"Sau anomaly, lineage BFS tìm downstream dataset và column chịu ảnh hưởng. SLO gom contract burn theo short/long window để tránh page vì một spike ngắn.", say:"Vì vậy output không dừng ở True/False: nó phải trả method, reason, owner và downstream impact để người trực xử lý được.", evidence:"Evidence: verification_summary.json", time:"60 giây" },
+      { label:"Bước 05 · Incident", title:"Chứng minh bằng fault → recovery", body:"Incident drill mô phỏng partial ingestion và KB stale. Hệ thống phát hiện 150 rows, page đúng policy, giữ được blast radius và sau reset quay về healthy.", say:"Đây là bằng chứng hành vi end-to-end: không chỉ detector đúng trên fixture, mà cả quyết định downstream và recovery đều có assertion.", evidence:"Evidence: incident_drill.json · gx_action_drill.json", time:"90 giây" },
+      { label:"Bước 06 · Close", title:"Chốt giới hạn và khả năng defend", body:"Kết quả là 32/32 pytest, 23/23 dbt và GX/incident PASS. Các con số đều truy được về raw artifacts; không tuyên bố những tool hoặc capability không có trong repo.", say:"Em chọn statistical guardrails vì chúng giải quyết đúng failure mode của lab, dễ tái lập, giải thích được và có thể mở rộng bằng evidence mới.", evidence:"Evidence: verification_summary.json · agent_log.md", time:"45 giây" }
+    ];
+    document.querySelectorAll('.test-card').forEach(card => card.addEventListener('click', () => card.classList.toggle('open')));
+    document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(item => item.classList.remove('active')); tab.classList.add('active');
+      const filter = tab.dataset.filter;
+      document.querySelectorAll('.test-card').forEach(card => card.classList.toggle('hidden', filter !== 'all' && card.dataset.group !== filter));
+    }));
+    function renderScenario(name) {
+      const item = scenarioData[name];
+      document.getElementById('scenarioCurrent').textContent = item.current;
+      document.getElementById('scenarioMedian').textContent = item.median;
+      document.getElementById('scenarioResult').textContent = item.result;
+      document.getElementById('scenarioReason').innerHTML = '<b>Vì sao:</b> ' + item.reason;
+      document.getElementById('scenarioDecision').classList.toggle('alert', item.alert);
+      document.querySelectorAll('.scenario-button').forEach(button => button.classList.toggle('active', button.dataset.scenario === name));
+    }
+    document.querySelectorAll('.scenario-button').forEach(button => button.addEventListener('click', () => renderScenario(button.dataset.scenario)));
+    function renderSpeaker(index) {
+      const item = speakerData[index];
+      document.getElementById('speakerLabel').textContent = item.label;
+      document.getElementById('speakerTitle').textContent = item.title;
+      document.getElementById('speakerBody').textContent = item.body;
+      document.getElementById('speakerSay').textContent = item.say;
+      document.getElementById('speakerEvidence').textContent = item.evidence;
+      document.getElementById('speakerTime').textContent = item.time;
+      document.querySelectorAll('.presenter-step').forEach(step => step.classList.toggle('active', Number(step.dataset.step) === index));
+    }
+    document.querySelectorAll('.presenter-step').forEach(step => step.addEventListener('click', () => renderSpeaker(Number(step.dataset.step))));
+    document.getElementById('printButton').addEventListener('click', () => window.print());
+  </script>
+</body>
+</html>

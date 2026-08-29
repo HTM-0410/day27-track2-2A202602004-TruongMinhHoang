@@ -1,0 +1,131 @@
+{
+  "all_checks_passed": true,
+  "artifact_schema_version": 1,
+  "candidate_points_before_cap": 33,
+  "checks": {
+    "automatic_quarantine": {
+      "candidate_points": 3,
+      "critical_quarantine_rows": 2,
+      "critical_reasons": [
+        "unique:order_id",
+        "unique:order_id"
+      ],
+      "passed": true,
+      "warning_quarantine_rows": 0
+    },
+    "column_lineage": {
+      "advanced_transitive_cycle_safe": [
+        "b.y",
+        "c.z",
+        "d.v"
+      ],
+      "baseline_one_hop": [
+        "b.y",
+        "c.z"
+      ],
+      "candidate_points": 7,
+      "passed": true
+    },
+    "dbt_native_unit_test": {
+      "baseline_failure": "two_active_scd_rows_double_revenue",
+      "candidate_points": 3,
+      "dbt_status": "pass",
+      "dbt_unit_unique_id": "unit_test.data_reliability_lab.fct_daily_revenue.fct_daily_revenue_deduplicates_active_customer_versions",
+      "deduplicated_revenue": 170.0,
+      "naive_join_revenue": 340.0,
+      "passed": true
+    },
+    "gx_severity_actions": {
+      "candidate_points": 3,
+      "critical_decision": "block",
+      "passed": true,
+      "warning_decision": "warn"
+    },
+    "mad_same_weekday": {
+      "advanced_drop_result": {
+        "is_anomaly": true,
+        "method": "auto:same_segment_history_mad",
+        "reason": "median=602.5; mad=10; threshold=3.5; finite_count=6; dropped_nonfinite=0; zscore=34.5632; baseline_source=same_segment_history; metric_name=row_count; day_of_week=2; relative_drop=0.751037; dropped_nonfinite=0",
+        "score": 34.56322216649675
+      },
+      "advanced_healthy_result": {
+        "is_anomaly": false,
+        "method": "auto:same_segment_history_mad",
+        "reason": "median=249; mad=5; threshold=3.5; finite_count=6; dropped_nonfinite=0; zscore=0.0512989; baseline_source=same_segment_history; metric_name=row_count; day_of_week=5; relative_drop=-0.00401606; dropped_nonfinite=0; directional=drop_only",
+        "score": 0.13489795
+      },
+      "baseline_failure": "pooled_zscore_false_positive_on_saturday",
+      "baseline_result": {
+        "is_anomaly": true,
+        "method": "zscore",
+        "reason": "mean=1007.5; std=11.4564; threshold=3; finite_count=8; dropped_nonfinite=0",
+        "score": 66.1200207415057
+      },
+      "candidate_points": 3,
+      "passed": true
+    },
+    "multiwindow_burn_rate": {
+      "advanced_sustained": {
+        "long_window_burn": 7.0,
+        "page": true,
+        "policy": "sre_multiwindow_v1",
+        "reason": "sustained_fast_burn",
+        "severity": "critical",
+        "short_window_burn": 15.0,
+        "thresholds": {
+          "fast": {
+            "long": 6.0,
+            "short": 14.4
+          },
+          "slow": {
+            "long": 3.0,
+            "short": 6.0
+          }
+        }
+      },
+      "advanced_transient": {
+        "long_window_burn": 2.0,
+        "page": false,
+        "policy": "sre_multiwindow_v1",
+        "reason": "single_window_spike",
+        "severity": "warning",
+        "short_window_burn": 15.0,
+        "thresholds": {
+          "fast": {
+            "long": 6.0,
+            "short": 14.4
+          },
+          "slow": {
+            "long": 3.0,
+            "short": 6.0
+          }
+        }
+      },
+      "baseline_short_only_pages_transient": true,
+      "candidate_points": 7,
+      "passed": true
+    },
+    "rag_embedding_drift": {
+      "advanced_result": {
+        "baseline_count": 20,
+        "current_count": 20,
+        "is_anomaly": true,
+        "ks_statistic": 0.5,
+        "location_effect": 0.0,
+        "method": "ks+robust_effect",
+        "metric": "embedding_norm_distribution",
+        "reason": "ks=0.5; ks_critical=0.43007; location_effect=0; scale_ratio=100; current_count=20; baseline_count=20; dropped_current=0; dropped_baseline=0",
+        "scale_ratio": 99.99999999999991,
+        "score": 33.33333333333331
+      },
+      "baseline_mean": 1.0,
+      "baseline_mean_only_misses": true,
+      "candidate_points": 7,
+      "current_mean": 1.0,
+      "passed": true
+    }
+  },
+  "grading_note": "Giảng viên quyết định điểm; đây là candidate evidence, không phải điểm tự chấm.",
+  "max_countable_points": 15,
+  "rubric_bonus_cap": 15
+}
