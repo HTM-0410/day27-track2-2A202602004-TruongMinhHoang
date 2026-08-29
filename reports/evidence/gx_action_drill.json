@@ -1,0 +1,662 @@
+{
+  "acceptance": {
+    "critical_blocks_pipeline": true,
+    "duplicate_rows_quarantined": 2,
+    "warning_continues_without_quarantine": true
+  },
+  "artifact_schema_version": 1,
+  "critical_case": {
+    "checkpoint_evidence": {
+      "artifact_schema_version": 1,
+      "checkpoint": "orders_reliability_checkpoint",
+      "data_asset": "orders_dataframe",
+      "data_source": "orders_pandas",
+      "decision": "block",
+      "expectation_suite": "orders_contract_suite",
+      "expectations": [
+        {
+          "action_on_failure": "quarantine",
+          "column": "__amount_numeric",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_between",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.amount.nonnegative",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "amount",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.amount.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__amount_type_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.amount.number",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__created_at_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.created_at.datetime",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "created_at",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.created_at.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "currency",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.currency.accepted",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "currency",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.currency.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__currency_type_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.currency.string",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "customer_id",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.customer_id.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__customer_id_type_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.customer_id.string",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": null,
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_table_row_count_to_be_between",
+          "observed_value": 2,
+          "pipeline_effect": "block",
+          "rule_id": "orders.nonempty_batch",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__order_id_type_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.order_id.integer",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "order_id",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.order_id.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "order_id",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_unique",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.order_id.unique",
+          "success": false,
+          "unexpected_count": 2
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": null,
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_table_columns_to_match_set",
+          "observed_value": [
+            "__amount_numeric",
+            "__amount_type_valid",
+            "__created_at_valid",
+            "__currency_type_valid",
+            "__customer_id_type_valid",
+            "__order_id_type_valid",
+            "__status_type_valid",
+            "__updated_at_epoch_seconds",
+            "__updated_at_valid",
+            "amount",
+            "created_at",
+            "currency",
+            "customer_id",
+            "order_id",
+            "status",
+            "updated_at"
+          ],
+          "pipeline_effect": "block",
+          "rule_id": "orders.required_columns",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "warn",
+          "column": "status",
+          "effective_severity": "warning",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "continue",
+          "rule_id": "orders.status.accepted",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "warn",
+          "column": "status",
+          "effective_severity": "warning",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "continue",
+          "rule_id": "orders.status.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "warn",
+          "column": "__status_type_valid",
+          "effective_severity": "warning",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "continue",
+          "rule_id": "orders.status.string",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__updated_at_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.updated_at.datetime",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "warn",
+          "column": "__updated_at_epoch_seconds",
+          "effective_severity": "warning",
+          "exception_raised": false,
+          "expectation_type": "expect_column_max_to_be_between",
+          "observed_value": 1787912760.0,
+          "pipeline_effect": "continue",
+          "rule_id": "orders.updated_at.freshness_30m",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "updated_at",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.updated_at.not_null",
+          "success": true,
+          "unexpected_count": 0
+        }
+      ],
+      "gx_version": "1.21.0",
+      "maximum_failure_severity": "critical",
+      "quarantine": {
+        "path": "generated/gx_orders_critical_quarantine.csv",
+        "row_count": 2
+      },
+      "severity_policy": {
+        "critical": {
+          "action": "quarantine",
+          "pipeline": "block"
+        },
+        "info": {
+          "action": "observe",
+          "pipeline": "continue"
+        },
+        "warning": {
+          "action": "warn",
+          "pipeline": "continue"
+        }
+      },
+      "source": {
+        "path": "orders.csv",
+        "row_count": 2,
+        "sha256": "2f1729758bdfc92f7eb9576ca5e59d772483bdfa0339c27c27b8b8feae373b10"
+      },
+      "validation_definition": "orders_validation_definition"
+    },
+    "decision": "block",
+    "exit_code": 1,
+    "failed_rules": [
+      "orders.order_id.unique"
+    ],
+    "maximum_failure_severity": "critical",
+    "quarantine_row_count": 2,
+    "quarantine_rows": [
+      {
+        "__quarantine_reasons": "unique:order_id",
+        "__source_row_number": 2,
+        "amount": 10,
+        "created_at": "2026-08-28T10:20:00Z",
+        "currency": "USD",
+        "customer_id": "C1",
+        "order_id": 1,
+        "status": "completed",
+        "updated_at": "2026-08-28T10:25:00Z"
+      },
+      {
+        "__quarantine_reasons": "unique:order_id",
+        "__source_row_number": 3,
+        "amount": 20,
+        "created_at": "2026-08-28T10:21:00Z",
+        "currency": "USD",
+        "customer_id": "C2",
+        "order_id": 1,
+        "status": "pending",
+        "updated_at": "2026-08-28T10:26:00Z"
+      }
+    ]
+  },
+  "reference_time_utc": "2026-08-28T10:30:00+00:00",
+  "warning_case": {
+    "checkpoint_evidence": {
+      "artifact_schema_version": 1,
+      "checkpoint": "orders_reliability_checkpoint",
+      "data_asset": "orders_dataframe",
+      "data_source": "orders_pandas",
+      "decision": "warn",
+      "expectation_suite": "orders_contract_suite",
+      "expectations": [
+        {
+          "action_on_failure": "quarantine",
+          "column": "__amount_numeric",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_between",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.amount.nonnegative",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "amount",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.amount.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__amount_type_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.amount.number",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__created_at_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.created_at.datetime",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "created_at",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.created_at.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "currency",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.currency.accepted",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "currency",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.currency.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__currency_type_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.currency.string",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "customer_id",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.customer_id.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__customer_id_type_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.customer_id.string",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": null,
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_table_row_count_to_be_between",
+          "observed_value": 2,
+          "pipeline_effect": "block",
+          "rule_id": "orders.nonempty_batch",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__order_id_type_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.order_id.integer",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "order_id",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.order_id.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "order_id",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_unique",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.order_id.unique",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": null,
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_table_columns_to_match_set",
+          "observed_value": [
+            "__amount_numeric",
+            "__amount_type_valid",
+            "__created_at_valid",
+            "__currency_type_valid",
+            "__customer_id_type_valid",
+            "__order_id_type_valid",
+            "__status_type_valid",
+            "__updated_at_epoch_seconds",
+            "__updated_at_valid",
+            "amount",
+            "created_at",
+            "currency",
+            "customer_id",
+            "order_id",
+            "status",
+            "updated_at"
+          ],
+          "pipeline_effect": "block",
+          "rule_id": "orders.required_columns",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "warn",
+          "column": "status",
+          "effective_severity": "warning",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "continue",
+          "rule_id": "orders.status.accepted",
+          "success": false,
+          "unexpected_count": 1
+        },
+        {
+          "action_on_failure": "warn",
+          "column": "status",
+          "effective_severity": "warning",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "continue",
+          "rule_id": "orders.status.not_null",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "warn",
+          "column": "__status_type_valid",
+          "effective_severity": "warning",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "continue",
+          "rule_id": "orders.status.string",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "__updated_at_valid",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_be_in_set",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.updated_at.datetime",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "warn",
+          "column": "__updated_at_epoch_seconds",
+          "effective_severity": "warning",
+          "exception_raised": false,
+          "expectation_type": "expect_column_max_to_be_between",
+          "observed_value": 1787912760.0,
+          "pipeline_effect": "continue",
+          "rule_id": "orders.updated_at.freshness_30m",
+          "success": true,
+          "unexpected_count": 0
+        },
+        {
+          "action_on_failure": "quarantine",
+          "column": "updated_at",
+          "effective_severity": "critical",
+          "exception_raised": false,
+          "expectation_type": "expect_column_values_to_not_be_null",
+          "observed_value": null,
+          "pipeline_effect": "block",
+          "rule_id": "orders.updated_at.not_null",
+          "success": true,
+          "unexpected_count": 0
+        }
+      ],
+      "gx_version": "1.21.0",
+      "maximum_failure_severity": "warning",
+      "quarantine": {
+        "path": "generated/gx_orders_critical_quarantine.csv",
+        "row_count": 0
+      },
+      "severity_policy": {
+        "critical": {
+          "action": "quarantine",
+          "pipeline": "block"
+        },
+        "info": {
+          "action": "observe",
+          "pipeline": "continue"
+        },
+        "warning": {
+          "action": "warn",
+          "pipeline": "continue"
+        }
+      },
+      "source": {
+        "path": "orders.csv",
+        "row_count": 2,
+        "sha256": "2eceb4822fc85d8526faaa3e1117e6dd752cdee61b96304405310c581100d1e5"
+      },
+      "validation_definition": "orders_validation_definition"
+    },
+    "decision": "warn",
+    "exit_code": 0,
+    "failed_rules": [
+      "orders.status.accepted"
+    ],
+    "maximum_failure_severity": "warning",
+    "quarantine_row_count": 0,
+    "quarantine_rows": []
+  }
+}

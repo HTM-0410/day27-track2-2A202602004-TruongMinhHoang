@@ -4,36 +4,44 @@ freshness:
   column: updated_at
   max_delay_minutes: 30
   severity: warning
+  action: warn
 columns:
   order_id:
     type: integer
     required: true
     unique: true
     severity: critical
+    action: block
   customer_id:
     type: string
     required: true
     severity: critical
+    action: quarantine
   amount:
     type: number
     required: true
     min: 0
     severity: critical
+    action: quarantine
   currency:
     type: string
     required: true
     accepted_values: [USD, VND]
     severity: critical
+    action: quarantine
   status:
     type: string
     required: true
     accepted_values: [pending, completed, refunded, cancelled]
     severity: warning
+    action: warn
   created_at:
     type: datetime
     required: true
     severity: critical
+    action: block
   updated_at:
     type: datetime
     required: true
     severity: critical
+    action: block

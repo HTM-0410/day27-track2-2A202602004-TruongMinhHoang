@@ -1,0 +1,177 @@
+{
+  "artifact_schema_version": 1,
+  "drill_type": "deterministic_in_memory_partial_ingestion_and_stale_kb",
+  "healthy": {
+    "kb_failed_contracts": [],
+    "orders_failed_contracts": [],
+    "orders_rows": 600,
+    "row_count_signal": {
+      "is_anomaly": false,
+      "method": "auto:mad",
+      "reason": "median=600; mad=32.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; baseline_source=same_segment_history; metric_name=row_count; day_of_week=4",
+      "score": 0.0
+    }
+  },
+  "incident": {
+    "blast_radius": {
+      "kb_documents": [
+        "kb_active_docs",
+        "rag_index",
+        "support_agent"
+      ],
+      "orders": [
+        "stg_orders",
+        "fct_daily_revenue",
+        "ceo_revenue_dashboard"
+      ]
+    },
+    "kb_failed_contracts": [
+      {
+        "action": "warn",
+        "check": "freshness",
+        "column": "published_at",
+        "details": "latest=2026-08-28T09:16:30+00:00; reference=2026-08-28T12:26:30+00:00; delay_minutes=190.000; max_delay_minutes=60.000; max_future_minutes=5.000",
+        "passed": false,
+        "severity": "warning"
+      }
+    ],
+    "kb_freshness_failure": {
+      "action": "warn",
+      "check": "freshness",
+      "column": "published_at",
+      "details": "latest=2026-08-28T09:16:30+00:00; reference=2026-08-28T12:26:30+00:00; delay_minutes=190.000; max_delay_minutes=60.000; max_future_minutes=5.000",
+      "passed": false,
+      "severity": "warning"
+    },
+    "multiwindow": {
+      "decision": {
+        "long_window_burn": 19.999999999999982,
+        "page": true,
+        "policy": "sre_multiwindow_v1",
+        "reason": "sustained_fast_burn",
+        "severity": "critical",
+        "short_window_burn": 39.999999999999964,
+        "thresholds": {
+          "fast": {
+            "long": 6.0,
+            "short": 14.4
+          },
+          "slow": {
+            "long": 3.0,
+            "short": 6.0
+          }
+        }
+      },
+      "long_window": {
+        "bad_events": 10,
+        "total_events": 100
+      },
+      "short_window": {
+        "bad_events": 4,
+        "total_events": 20
+      },
+      "source": "explicit_synthetic_drill_event_counts"
+    },
+    "orders_failed_contracts": [],
+    "orders_rows": 150,
+    "orders_volume_ratio": 0.25,
+    "rag_signals": {
+      "embedding_input": "unit_norm_proxy_for_nonempty_content",
+      "embedding_norm": {
+        "baseline_count": 14,
+        "current_count": 5,
+        "is_anomaly": false,
+        "ks_statistic": 0.5714285714285714,
+        "location_effect": 0.3638622668579737,
+        "method": "ks+robust_effect",
+        "metric": "embedding_norm_distribution",
+        "reason": "ks=0.571429; ks_critical=0.708544; location_effect=0.363862; scale_ratio=1.2917; current_count=5; baseline_count=14; dropped_current=0; dropped_baseline=0",
+        "scale_ratio": 1.2916975537435154,
+        "score": 0.8064830839810025
+      },
+      "text_length": {
+        "current_mean": 15.6,
+        "document_count": 5,
+        "is_anomaly": false,
+        "method": "auto:mad",
+        "metric": "mean_text_length",
+        "reason": "median=14.815; mad=0.59; threshold=3.5; finite_count=14; dropped_nonfinite=0; baseline_source=history; metric_name=mean_text_length",
+        "score": 0.8974143283898309
+      }
+    },
+    "row_count_signal": {
+      "is_anomaly": true,
+      "method": "auto:mad",
+      "reason": "median=600; mad=32.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; baseline_source=same_segment_history; metric_name=row_count; day_of_week=4",
+      "score": 9.339088846153848
+    },
+    "slo": {
+      "critical_contract_pass": {
+        "actual_bad_rate": 0.0,
+        "allowed_bad_rate": 0.0010000000000000009,
+        "breached": false,
+        "burn_rate": 0.0,
+        "remaining_error_budget_fraction": 1.0,
+        "target": 0.999
+      },
+      "rag_index_freshness": {
+        "actual_bad_rate": 1.0,
+        "allowed_bad_rate": 0.010000000000000009,
+        "breached": true,
+        "burn_rate": 99.99999999999991,
+        "remaining_error_budget_fraction": 0.0,
+        "target": 0.99
+      },
+      "revenue_freshness": {
+        "actual_bad_rate": 1.0,
+        "allowed_bad_rate": 0.0050000000000000044,
+        "breached": true,
+        "burn_rate": 199.99999999999983,
+        "remaining_error_budget_fraction": 0.0,
+        "target": 0.995
+      }
+    },
+    "what_happened": [
+      "orders batch contains 25 percent of the healthy row volume",
+      "KB published_at values lag the healthy source by three hours"
+    ]
+  },
+  "input_hashes": {
+    "config": "5f2ec2651c3f42285154972b799cc21cc439948aea47a939271ef7ebd849979f",
+    "history": "faa35861605891cf9d7911d9a62ccc6bde2c435976f4e68dc3df1276449d71d1",
+    "kb": "e46d4e89e7b1302ffd6c1e25f3497e4d58f04d77f434728a598f5638d6c23511",
+    "kb_contract": "46445edb0349f87e72cff75db2c69bae92c65b204fe98fdc17434a581422a20b",
+    "lineage": "dce925cbe75269b7f9098094a4f15384e6ef93265b2f4d540a1f793994cd130d",
+    "orders": "335dd12e4dca505da2e5adb79db565c9a710c534b0c293272be422f9144c8d8b",
+    "orders_contract": "f38df068a292871f1c649d2f13494a9fe5139f48d153165fb160a4a0fa5f0c89"
+  },
+  "recovery": {
+    "kb_failed_contracts": [],
+    "multiwindow": {
+      "long_window_burn": 0.0,
+      "page": false,
+      "policy": "sre_multiwindow_v1",
+      "reason": "within_multiwindow_policy",
+      "severity": "info",
+      "short_window_burn": 0.0,
+      "thresholds": {
+        "fast": {
+          "long": 6.0,
+          "short": 14.4
+        },
+        "slow": {
+          "long": 3.0,
+          "short": 6.0
+        }
+      }
+    },
+    "orders_failed_contracts": [],
+    "row_count_signal": {
+      "is_anomaly": false,
+      "method": "auto:mad",
+      "reason": "median=600; mad=32.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; baseline_source=same_segment_history; metric_name=row_count; day_of_week=4",
+      "score": 0.0
+    }
+  },
+  "reference_time_utc": "2026-08-28T12:26:30+00:00"
+}

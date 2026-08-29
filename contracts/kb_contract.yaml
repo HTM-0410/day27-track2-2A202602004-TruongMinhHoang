@@ -4,10 +4,11 @@ freshness:
   column: published_at
   max_delay_minutes: 60
   severity: warning
+  action: warn
 fields:
-  doc_id: {required: true, type: string}
-  version: {required: true, type: integer}
-  effective_at: {required: true, type: datetime}
-  published_at: {required: true, type: datetime}
-  source_uri: {required: true, type: string}
-  content: {required: true, type: string, min_length: 20}
+  doc_id: {required: true, type: string, severity: critical, action: block}
+  version: {required: true, type: integer, severity: critical, action: block}
+  effective_at: {required: true, type: datetime, severity: critical, action: block}
+  published_at: {required: true, type: datetime, severity: critical, action: block}
+  source_uri: {required: true, type: string, severity: critical, action: quarantine}
+  content: {required: true, type: string, min_length: 20, severity: critical, action: quarantine}

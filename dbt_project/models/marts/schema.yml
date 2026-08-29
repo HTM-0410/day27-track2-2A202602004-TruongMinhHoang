@@ -2,9 +2,15 @@ version: 2
 
 models:
   - name: fct_daily_revenue
-    description: Daily completed-order revenue for the CEO dashboard.
+    description: >-
+      Daily completed USD-order revenue for the CEO dashboard. A singular test
+      blocks completed non-USD inputs until governed FX conversion is available.
     columns:
       - name: order_date
+        data_tests:
+          - not_null
+          - unique
+      - name: completed_order_rows
         data_tests:
           - not_null
       - name: daily_revenue

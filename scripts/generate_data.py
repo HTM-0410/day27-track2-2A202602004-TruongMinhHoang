@@ -13,7 +13,21 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def generate(rows: int, days: int, seed: int) -> None:
+def parse_as_of(value: str) -> datetime:
+    """Parse an ISO-8601 generation clock and normalize it to UTC."""
+    normalized = value.strip().replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("--as-of must be an ISO-8601 datetime") from exc
+    if parsed.tzinfo is None:
+        raise argparse.ArgumentTypeError("--as-of must include a timezone")
+    return parsed.astimezone(timezone.utc).replace(microsecond=0)
+
+
+def generate(
+    rows: int, days: int, seed: int, as_of: datetime | None = None
+) -> None:
     random.seed(seed)
     rng = np.random.default_rng(seed)
     baseline_dir = ROOT / "data" / "baseline"
@@ -21,7 +35,9 @@ def generate(rows: int, days: int, seed: int) -> None:
     baseline_dir.mkdir(parents=True, exist_ok=True)
     history_dir.mkdir(parents=True, exist_ok=True)
 
-    now = datetime.now(timezone.utc).replace(microsecond=0)
+    now = (as_of or datetime.now(timezone.utc)).astimezone(timezone.utc).replace(
+        microsecond=0
+    )
 
     # Customers with a small amount of SCD history, but exactly one active row per customer.
     customers = []
@@ -167,5 +183,11 @@ if __name__ == "__main__":
     parser.add_argument("--rows", type=int, default=600)
     parser.add_argument("--days", type=int, default=42)
     parser.add_argument("--seed", type=int, default=27)
+    parser.add_argument(
+        "--as-of",
+        type=parse_as_of,
+        default=None,
+        help="fixed ISO-8601 UTC-aware clock for bit-for-bit reproducible data",
+    )
     args = parser.parse_args()
-    generate(args.rows, args.days, args.seed)
+    generate(args.rows, args.days, args.seed, args.as_of)

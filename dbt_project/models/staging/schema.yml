@@ -11,6 +11,12 @@ models:
       - name: customer_id
         data_tests:
           - not_null
+      - name: amount_usd
+        description: >-
+          Order amount used by the USD revenue mart. A singular business test
+          blocks completed non-USD rows until a governed FX conversion exists.
+        data_tests:
+          - not_null
       - name: currency
         data_tests:
           - accepted_values:
@@ -25,5 +31,12 @@ models:
   - name: stg_customers
     columns:
       - name: customer_id
+        data_tests:
+          - not_null
+      - name: is_active
+        data_tests:
+          - not_null
+      - name: valid_from
+        description: Start timestamp used to select the latest active SCD version.
         data_tests:
           - not_null

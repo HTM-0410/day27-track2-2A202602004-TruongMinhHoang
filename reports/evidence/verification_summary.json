@@ -1,0 +1,104 @@
+{
+  "artifact_schema_version": 1,
+  "dbt": {
+    "result_count": 23,
+    "status_counts": {
+      "pass": 18,
+      "success": 5
+    }
+  },
+  "evidence_files": {
+    "reports/evidence/dbt_run_results.json": {
+      "bytes": 25487,
+      "sha256": "eef8ef4e750ac28d7ef9013937df2e648de5490a14ab5c612b3f68edf894c3b9"
+    },
+    "reports/evidence/gx_action_drill.json": {
+      "bytes": 23220,
+      "sha256": "b7e9e59cb0558dd4a8a89db3532f8ae2d875f11cb68962c6fde16dc686deaf0e"
+    },
+    "reports/evidence/gx_healthy_validation.json": {
+      "bytes": 9685,
+      "sha256": "fca26aa3e3b5ce9a5a0f8e7d2be128eb4195a47caf5d3e0dfb7c9e5a1f53594f"
+    },
+    "reports/evidence/healthy_baseline_metrics.json": {
+      "bytes": 4243,
+      "sha256": "2c827f67aa4836fe7f57947b8f95c01d38ba54c04719a18658eb781267786a00"
+    },
+    "reports/evidence/incident_drill.json": {
+      "bytes": 6134,
+      "sha256": "062d3492c7ec7793ab539c38777e78c97556ff5858fce62836fd95412a39ee48"
+    },
+    "reports/evidence/pytest_results.xml": {
+      "bytes": 4398,
+      "sha256": "2abd760e0b54d4656c63e3c603c23de53632ac87cae0f8f41d35c585ec7b3187"
+    }
+  },
+  "gx": {
+    "critical_case": "block",
+    "critical_quarantine_rows": 2,
+    "healthy_decision": "pass",
+    "healthy_expectation_count": 21,
+    "healthy_failed_expectations": 0,
+    "warning_case": "warn"
+  },
+  "healthy_baseline": {
+    "contract_slo": {
+      "actual_bad_rate": 0.0,
+      "allowed_bad_rate": 0.0010000000000000009,
+      "breached": false,
+      "burn_rate": 0.0,
+      "remaining_error_budget_fraction": 1.0,
+      "target": 0.999
+    },
+    "failed_contract_issue_count": 0,
+    "kb_freshness_minutes": 10.012682116666667,
+    "multiwindow_burn_signal": {
+      "current_contract_burn": 0.0,
+      "historical_short_burn": 3.7299999999999964,
+      "long_window_burn": 4.279999999999996,
+      "long_window_points": 14,
+      "page": false,
+      "policy": "sre_multiwindow_v1",
+      "reason": "within_multiwindow_policy",
+      "severity": "info",
+      "short_window_burn": 3.7299999999999964,
+      "short_window_points": 3,
+      "source": "current_contract_check_plus_historical_null_rate_proxy",
+      "thresholds": {
+        "fast": {
+          "long": 6.0,
+          "short": 14.4
+        },
+        "slow": {
+          "long": 3.0,
+          "short": 6.0
+        }
+      }
+    },
+    "orders_freshness_minutes": 5.0139916,
+    "orders_rows": 252,
+    "row_count_anomaly": {
+      "is_anomaly": false,
+      "method": "auto:mad",
+      "reason": "median=252.5; mad=12.5; threshold=3.5; finite_count=6; dropped_nonfinite=0; baseline_source=same_segment_history; metric_name=row_count; day_of_week=5",
+      "score": 0.02697959
+    }
+  },
+  "incident_drill": {
+    "healthy_orders_rows": 600,
+    "incident_orders_rows": 150,
+    "incident_row_anomaly": true,
+    "kb_freshness_failed": true,
+    "multiwindow_page": true,
+    "recovery_page": false,
+    "recovery_row_anomaly": false
+  },
+  "ket_qua_tong": "PASS",
+  "pytest": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 32,
+    "time_seconds": 3.83
+  }
+}

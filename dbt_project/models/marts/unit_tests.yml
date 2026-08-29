@@ -1,0 +1,22 @@
+version: 2
+
+unit_tests:
+  - name: fct_daily_revenue_deduplicates_active_customer_versions
+    description: >-
+      Multiple active SCD rows for one customer must not multiply completed
+      order facts; pending orders and inactive history must not affect revenue.
+    model: fct_daily_revenue
+    given:
+      - input: ref('stg_orders')
+        rows:
+          - {order_id: 1, customer_id: C0001, amount_usd: 100.0, currency: USD, status: completed, order_date: '2026-08-01'}
+          - {order_id: 2, customer_id: C0001, amount_usd: 70.0, currency: USD, status: completed, order_date: '2026-08-01'}
+          - {order_id: 3, customer_id: C0001, amount_usd: 999.0, currency: USD, status: pending, order_date: '2026-08-01'}
+      - input: ref('stg_customers')
+        rows:
+          - {customer_id: C0001, country: VN, tier: basic, is_active: false, valid_from: '2025-01-01', valid_to: '2025-12-31'}
+          - {customer_id: C0001, country: VN, tier: silver, is_active: true, valid_from: '2026-01-01', valid_to: null}
+          - {customer_id: C0001, country: VN, tier: gold, is_active: true, valid_from: '2026-07-01', valid_to: null}
+    expect:
+      rows:
+        - {order_date: '2026-08-01', completed_order_rows: 2, daily_revenue: 170.0}
